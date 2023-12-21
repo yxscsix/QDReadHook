@@ -423,6 +423,28 @@ fun PackageParam.freeAdReward(versionCode: Int) {
             }.hook().before {
                 instance<Activity>().finish()
             }
+
+            findClass("com.qidian.QDReader.framework.webview.CustomWebView").hook {
+                    injectMember {
+                        method {
+                            name = "judian"
+                            paramCount(1)
+                            returnType = UnitType
+                        }
+                        afterHook {
+                            val str = args[0].toString()
+                            loggerE(msg = "----------------------------")
+                            loggerE(msg = str)
+                            if (str.contains("{\"status\":2}")){
+                                for (i in 1..9){
+                                    callOriginal()
+                                }
+                            }
+
+                        }
+
+                    }
+                }
         }
 
         else -> "免广告领取奖励".printlnNotSupportVersion(versionCode)
